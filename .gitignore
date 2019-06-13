@@ -107,3 +107,4 @@ venv.bak/
 # Resources
 /test_images/
 /test_videos/
+/test_videos_output/
