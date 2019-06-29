@@ -105,6 +105,6 @@ venv.bak/
 
 
 # Resources
-/test_images/
-/test_videos/
-/test_videos_output/
+/P1_FindingLaneLines/test_images/
+/P1_FindingLaneLines/test_videos/
+/P1_FindingLaneLines/test_videos_output/
