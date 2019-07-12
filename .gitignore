@@ -102,3 +102,12 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+# Resources
+/P1_FindingLaneLines/test_images/
+/P1_FindingLaneLines/test_videos/
+/P1_FindingLaneLines/test_videos_output/
+
+# Outputs
+/output_images/
