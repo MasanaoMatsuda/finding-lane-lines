@@ -5,8 +5,8 @@ class InputHolder():
         self.__calib = calibration
         self.__M = cv2.getPerspectiveTransform(src, dst)
         self.__Minv = cv2.getPerspectiveTransform(dst, src)
-        self.__real_y = real_ym
-        self.__real_x = real_xm
+        self.__real_ym = real_ym
+        self.__real_xm = real_xm
     @property
     def calib(self):
         return self.__calib
@@ -17,8 +17,8 @@ class InputHolder():
     def Minv(self):
         return self.__Minv
     @property
-    def real_y(self):
-        return self.__real_y
+    def real_ym(self):
+        return self.__real_ym
     @property
-    def real_x(self):
-        return self.__real_x
+    def real_xm(self):
+        return self.__real_xm
