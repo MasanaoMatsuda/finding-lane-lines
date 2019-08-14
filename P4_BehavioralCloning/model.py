@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
+import multiprocessing
 import warnings
 from math import ceil
 from sklearn.model_selection import train_test_split
@@ -67,14 +68,15 @@ model.add(Dense(50))
 model.add(Dense(10))
 model.add(Dense(1))
 
-
 model.compile(loss='mse', optimizer=Adam(lr=0.0001))
+
 history_obj = model.fit_generator(BatchSequence(train_set["image_path"].values, train_set["steering"].values, batch_size),
                                   steps_per_epoch=ceil(len(train_set)/batch_size),
                                   validation_data=BatchSequence(valid_set["image_path"].values, valid_set["steering"].values, batch_size),
                                   validation_steps=ceil(len(valid_set)/batch_size),
                                   nb_epoch=epoch,
-                                  verbose=1)
+                                  verbose=1,
+                                  workers=multiprocessing.cpu_count()-1)
 model.save(out_fname)
 
 ### plt.plot(history_obj.history['loss'])
