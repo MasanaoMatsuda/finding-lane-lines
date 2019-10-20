@@ -5,6 +5,9 @@
 #include <iostream>
 #include <random>
 #include <iterator>
+#include <algorithm>
+#include <math.h>
+#include <float.h>
 #include "helper_functions.h"
 
 struct Particle {
@@ -18,14 +21,10 @@ struct Particle {
 	std::vector<double> sense_y;
 };
 
-class ParticleFilter {
-	int num_particles;
-	bool is_initialized;
-	std::vector<double> weights;
-public:
-	std::vector<Particle> particles;
-
-	ParticleFilter() : num_particles(0), is_initialized(false) {}
+class ParticleFilter 
+{
+public: // [methods]
+	ParticleFilter(int num_particles) : num_particles(num_particles), is_initialized(false) {}
 	
 	~ParticleFilter() {}
 	
@@ -52,6 +51,17 @@ public:
 	std::string getSenseCoord(Particle best, std::string coordinate);
 
 	const bool getIsInitialized() const { return is_initialized; };
+
+private: //[methods]
+	void transformCoordinate(Observation& to_map_obs, const Observation& from_local_obs, const Particle& particle);
+	Map::landmark GetNearestNeighborLandmark(const Map &map, const Observation& observation);
+public: // [data members]
+	std::vector<Particle> particles;
+
+private: // [data members]
+	int num_particles;
+	bool is_initialized;
+	std::vector<double> weights;
 };
 
 #endif // !PARTICLE_FILTER_H_

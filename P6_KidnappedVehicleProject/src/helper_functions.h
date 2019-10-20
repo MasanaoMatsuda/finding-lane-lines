@@ -14,9 +14,16 @@
 const double M_PI = 3.14159265358979323846;
 #endif // !M_PI
 
-inline double euclidean_distance(double x1, double y1, double x2, double y2)
+inline double euclidean_distance(const double &x1, const double &y1, const double &x2, const double &y2)
 {
 	return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+}
+
+inline double multivariate_prob(double sig_x, double sig_y, double x_obs, double y_obs, double mu_x, double mu_y)
+{
+	double gauss_norm = 1 / (2 * M_PI * sig_x * sig_y);
+	double exponent = (pow(x_obs - mu_x, 2) / (2 * pow(sig_x, 2))) + (pow(y_obs - mu_y, 2) / (2 * pow(sig_y, 2)));
+	return gauss_norm * exp(-exponent);
 }
 
 inline double* getError(double gt_x, double gt_y, double gt_theta,
@@ -47,13 +54,13 @@ inline bool read_map_data(std::string filename, Map& map)
 		int landmark_id;
 		float landmark_x, landmark_y;
 
-		map_iss >> landmark_id;
 		map_iss >> landmark_x;
-		map_iss >> landmark_y;
+		map_iss >> landmark_y; 
+		map_iss >> landmark_id;
 
-		landmark.id = landmark_id;
 		landmark.x = landmark_x;
 		landmark.y = landmark_y;
+		landmark.id = landmark_id;
 
 		map.landmarks.push_back(landmark);
 	}

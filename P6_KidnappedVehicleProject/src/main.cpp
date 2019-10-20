@@ -38,7 +38,7 @@ int main()
 		return -1;
 	}
 
-	ParticleFilter pf;
+	ParticleFilter pf(1000);
 
 	h.onMessage([&pf, &map, &delta_t, &sensor_range, &sigma_pos, &sigma_landmark]
 	(uWS::WebSocket<uWS::SERVER> ws, char* data, size_t length, uWS::OpCode opCode) {
