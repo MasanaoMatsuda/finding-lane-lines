@@ -32,20 +32,40 @@ void ParticleFilter::predict(double delta_t, double stddevs[], double velocity, 
 {
 	std::random_device seed_gen;
 	std::mt19937 mt(seed_gen());
-	std::normal_distribution<> dist_vel(velocity, stddevs[0]);
-	std::normal_distribution<> dist_yaw(yaw_rate, stddevs[1]);
 
 	std::cout << "Predict" << std::endl;
 	for (int i = 0; i < num_particles; ++i)
 	{
-		particles[i].theta = fmod(particles[i].theta+dist_yaw(mt)*delta_t, 2*M_PI);
-		particles[i].x += dist_vel(mt) * delta_t * cos(yaw_rate);
-		particles[i].y += dist_vel(mt) * delta_t * sin(yaw_rate);
+		particles[i].theta += yaw_rate * delta_t;
+		particles[i].x += velocity * delta_t * cos(particles[i].theta);
+		particles[i].y += velocity * delta_t * sin(particles[i].theta);
 
-		//double new_theta = particles[i].theta + dist_yaw(mt);
-		//particles[i].x += dist_vel(mt) / yaw_rate * (sin(new_theta) - sin(particles[i].theta));
-		//particles[i].y += dist_vel(mt) / yaw_rate * (cos(particles[i].theta) - cos(new_theta));
-		//particles[i].theta = new_theta;
+		std::normal_distribution<> dist_x(particles[i].x, stddevs[0]);
+		std::normal_distribution<> dist_y(particles[i].y, stddevs[1]);
+		std::normal_distribution<> dist_t(particles[i].theta, stddevs[2]);
+		particles[i].x = dist_x(mt);
+		particles[i].y = dist_y(mt);
+		particles[i].theta = dist_t(mt);
+
+		/*
+		if (abs(yaw_rate) < 0.0001)
+		{
+			particles[i].x += (delta_t * velocity * (cos(particles[i].theta)));
+			particles[i].y += (delta_t * velocity * (sin(particles[i].theta)));
+		}
+		else
+		{
+			particles[i].theta += yaw_rate * delta_t;
+			particles[i].x += (velocity / yaw_rate) * (sin(particles[i].theta + yaw_rate * delta_t) - sin(particles[i].theta));
+			particles[i].y += (velocity / yaw_rate) * (cos(particles[i].theta) - cos(particles[i].theta + yaw_rate * delta_t));
+		}
+		std::normal_distribution<double> dist_x(particles[i].x, stddevs[0]);
+		std::normal_distribution<double> dist_y(particles[i].y, stddevs[1]);
+		std::normal_distribution<double> dist_t(particles[i].theta, stddevs[2]);
+		particles[i].x = dist_x(mt);
+		particles[i].y = dist_y(mt);
+		particles[i].theta = dist_t(mt);
+		*/
 	}
 }
 

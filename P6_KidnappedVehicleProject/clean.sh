@@ -6,7 +6,7 @@
 #
 
 # Remove the dedicated output directories
-cd `dirname $0`
+cd C:\Users\mmasa\Udacity\SelfDrivingCarEngineerND\Projects\P6_KidnappedVehicleProject
 
 rm -rf build
 
