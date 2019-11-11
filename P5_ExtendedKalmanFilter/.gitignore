@@ -1,0 +1,8 @@
+# build files
+build/
+
+# editor config
+.vscode/
+
+# simulator
+/term2_sim_windows/
