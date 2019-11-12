@@ -77,23 +77,45 @@ int main() {
           double car_d = j[1]["d"];
           double car_yaw = j[1]["yaw"];
           double car_speed = j[1]["speed"];
-
-          //std::cout << car_x << " " << car_y << std::endl;
-          //std::cout << car_s << " " << car_d << std::endl;
-          //std::cout << car_yaw << " " << car_speed << std::endl;
-          //std::cout << std::endl;
-
           // Previous path data given to the Planner
           auto previous_path_x = j[1]["previous_path_x"];
           auto previous_path_y = j[1]["previous_path_y"];
           // Previous path's end s and d values 
           double end_path_s = j[1]["end_path_s"];
           double end_path_d = j[1]["end_path_d"];
-
           // Sensor Fusion Data, a list of all other cars on the same side of the road.
           auto sensor_fusion = j[1]["sensor_fusion"];
 
+          int lane = 1; // start in lane 1
+          double ref_vel = 49.5; // mph
+
           int prev_size = previous_path_x.size();
+
+          if (prev_size > 0)
+            car_s = end_path_s;
+
+          for (int i = 0; i < sensor_fusion.size(); ++i)
+          {
+            std::cout << "FOR" << std::endl;
+            float d = sensor_fusion[i][6];
+            if (d < (2+4*lane+2) && d > (2+4*lane-2))
+            {
+              std::cout << "If it is same lane" << std::endl;
+              double vx = sensor_fusion[i][3];
+              double vy = sensor_fusion[i][4];
+              double check_speed = sqrt(vx*vx + vy*vy);
+              double check_car_s = sensor_fusion[i][5];
+              check_car_s += ((double)prev_size*.02*check_speed);
+
+              if (check_car_s > car_s && (check_car_s - car_s) < 30)
+              {
+                std::cout << "Collision!!!" << std::endl;
+                ref_vel = check_speed - 1;
+                // Do some logic here to avoid collision.
+                // ex. flag to try to change lanes.
+              }
+            }
+          }
           
           // Create a list of widely spaced (x,y) waypoints, evenly spaced at 30m
           // Later we will interpolate these waypoints with a spline 
@@ -133,8 +155,6 @@ int main() {
           }
           
 
-          int lane = 1; // start in lane 1
-          double ref_vel = 49.5; // mph
           // In Frenet add evenly 30m spaced points ahead of the starting reference
           vector<double> next_wp0 = getXY(car_s+30, (2+4*lane), map_waypoints_s, map_waypoints_x, map_waypoints_y);
           vector<double> next_wp1 = getXY(car_s+60, (2+4*lane), map_waypoints_s, map_waypoints_x, map_waypoints_y);
