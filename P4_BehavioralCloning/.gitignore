@@ -1,0 +1,12 @@
+#Simulator
+simulator_windows/
+
+#input dataset
+/input_data/
+/data/
+
+#output
+*.mp4
+*.h5
+/run*/
+/output_images/
