@@ -111,3 +111,8 @@ venv.bak/
 
 # Outputs
 /output_images/
+
+# Simulators
+/term2_sim_windows/
+/term3_sim_windows/
+/win_sys_int/
